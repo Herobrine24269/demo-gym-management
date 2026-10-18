@@ -1,0 +1,201 @@
+@extends('layouts.public')
+@section('title', 'Kinetic Apex — Premier Athletic Facility')
+@section('meta_description', 'Premier equipment, elite coaches, tailored nutrition. Join Kinetic Apex today.')
+
+@section('content')
+
+{{-- ── HERO ──────────────────────────────────────────────────── --}}
+<section style="position:relative;width:100%;overflow:hidden;background:var(--color-surface-lowest);padding:80px 0 64px;">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:350px;background:rgba(57,255,20,.07);filter:blur(100px);border-radius:50%;pointer-events:none;"></div>
+    <div style="position:absolute;top:30%;right:-100px;width:320px;height:320px;background:rgba(129,207,255,.06);filter:blur(80px);border-radius:50%;pointer-events:none;"></div>
+
+    <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
+        <div style="display:grid;grid-template-columns:7fr 5fr;gap:40px;align-items:center;">
+            <div>
+                <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:var(--color-surface-high);color:var(--color-primary-container);margin-bottom:24px;">
+                    <span class="pulse-green" style="width:8px;height:8px;"></span>
+                    <span style="font-family:var(--font-heading);font-size:11px;letter-spacing:.08em;text-transform:uppercase;">Precision High-Output Facility /// Sector 4</span>
+                </div>
+                <h1 style="font-family:var(--font-heading);font-size:clamp(36px,6vw,64px);font-weight:700;text-transform:uppercase;color:var(--color-on-surface);line-height:1;margin:0 0 20px;">
+                    UNLEASH PEAK <span style="color:var(--color-primary-container);">PERFORMANCE.</span><br>
+                    FORGED FOR ATHLETES.
+                </h1>
+                <p style="font-size:16px;color:var(--color-on-surface-variant);max-width:520px;margin-bottom:32px;line-height:1.6;">
+                    Premier equipment, tailored nutrition protocols, and elite strength coaches. Join an uncompromising community engineered purely for tangible physiological results.
+                </p>
+                <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:40px;">
+                    @auth
+                    <a href="{{ auth()->user()->dashboardRoute() }}" class="btn-primary" style="padding:14px 28px;font-size:14px;">
+                        <span class="material-symbols-outlined" style="font-size:18px;">dashboard</span> Go to Dashboard
+                    </a>
+                    @else
+                    <a href="{{ route('login') }}" class="btn-primary" style="padding:14px 28px;font-size:14px;">
+                        Member Login <span class="material-symbols-outlined" style="font-size:18px;">bolt</span>
+                    </a>
+                    @endauth
+                    <a href="#diet-plans" class="btn-ghost" style="padding:14px 28px;font-size:14px;">
+                        View Diet Plans <span class="material-symbols-outlined" style="font-size:18px;color:var(--color-primary-container);">restaurant</span>
+                    </a>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px;background:rgba(32,31,31,.7);border-radius:12px;">
+                    @foreach([['2,400+','Active Members'],['98.4%','Retention Rate'],['24/7','Facility Access']] as [$n,$l])
+                    <div>
+                        <div style="font-family:var(--font-heading);font-size:clamp(28px,4vw,48px);font-weight:700;color:var(--color-primary-container);line-height:1;">{{ $n }}</div>
+                        <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-on-surface-variant);margin-top:4px;">{{ $l }}</div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            <div>
+                <div style="border-radius:12px;overflow:hidden;background:var(--color-surface-high);aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;position:relative;">
+                    <span class="material-symbols-outlined" style="font-size:120px;color:var(--color-surface-highest);">fitness_center</span>
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top,var(--color-surface-lowest) 0%,transparent 50%);"></div>
+                    <div style="position:absolute;bottom:16px;left:16px;right:16px;background:rgba(28,27,27,.9);backdrop-filter:blur(8px);padding:12px 16px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
+                        <div>
+                            <div style="font-family:var(--font-heading);font-size:10px;letter-spacing:.08em;color:var(--color-outline);text-transform:uppercase;">Desk Check-In Protocol</div>
+                            <div style="font-family:var(--font-heading);font-size:14px;font-weight:600;color:var(--color-on-surface);text-transform:uppercase;">Staff Assisted Manual Entry</div>
+                        </div>
+                        <div style="width:40px;height:40px;border-radius:6px;background:rgba(57,255,20,.2);display:flex;align-items:center;justify-content:center;color:var(--color-primary-container);">
+                            <span class="material-symbols-outlined">badge</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ── POSTS ─────────────────────────────────────────────────── --}}
+<section id="posts" style="background:var(--color-surface);padding:64px 0;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px;">
+            <div>
+                <div style="display:flex;align-items:center;gap:8px;color:var(--color-primary-container);margin-bottom:8px;">
+                    <span style="font-family:var(--font-heading);font-size:14px;">///</span>
+                    <span style="font-family:var(--font-heading);font-size:11px;letter-spacing:.08em;text-transform:uppercase;">Apex Transmission Hub</span>
+                </div>
+                <h2 style="font-family:var(--font-heading);font-size:clamp(24px,4vw,36px);font-weight:700;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 8px;">Latest Gym Posts & Guides</h2>
+                <p style="font-size:14px;color:var(--color-on-surface-variant);margin:0;">Published weekly by our head trainers.</p>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+            @forelse($posts as $post)
+            <article style="display:flex;flex-direction:column;background:var(--color-surface-low);border-radius:12px;overflow:hidden;transition:box-shadow .2s,background .2s;" onmouseover="this.style.boxShadow='0 0 24px rgba(57,255,20,.15)';this.style.background='var(--color-surface-container)'" onmouseout="this.style.boxShadow='none';this.style.background='var(--color-surface-low)'">
+                <div style="height:180px;background:var(--color-surface-container);display:flex;align-items:center;justify-content:center;position:relative;">
+                    <span class="material-symbols-outlined" style="font-size:60px;color:var(--color-surface-highest);">article</span>
+                    <span style="position:absolute;top:12px;left:12px;" class="badge-green">{{ $post->category->name }}</span>
+                </div>
+                <div style="padding:20px;display:flex;flex-direction:column;flex:1;">
+                    <div style="display:flex;align-items:center;gap:8px;color:var(--color-outline);font-size:11px;margin-bottom:10px;">
+                        <span class="material-symbols-outlined" style="font-size:14px;">calendar_today</span>
+                        {{ $post->published_at?->format('d M Y') }}
+                        <span>·</span>
+                        <span>{{ $post->read_minutes ?? 5 }} min read</span>
+                    </div>
+                    <h3 style="font-family:var(--font-heading);font-size:16px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 10px;line-height:1.3;">{{ $post->title }}</h3>
+                    <p style="font-size:13px;color:var(--color-on-surface-variant);flex:1;margin:0 0 16px;">{{ Str::limit($post->excerpt, 100) }}</p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--color-surface-highest);">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <div style="width:28px;height:28px;border-radius:50%;background:rgba(57,255,20,.2);color:var(--color-primary-container);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:11px;font-weight:700;">{{ $post->author->initials() }}</div>
+                            <span style="font-size:12px;color:var(--color-on-surface-variant);">{{ $post->author->name }}</span>
+                        </div>
+                        <a href="{{ route('login') }}" style="font-family:var(--font-heading);font-size:11px;letter-spacing:.06em;color:var(--color-primary-container);text-decoration:none;text-transform:uppercase;">Read →</a>
+                    </div>
+                </div>
+            </article>
+            @empty
+            <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--color-outline);">No posts published yet.</div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+{{-- ── MEMBERSHIP PLANS ──────────────────────────────────────── --}}
+<section id="plans" style="background:var(--color-surface-lowest);padding:64px 0;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
+        <div style="text-align:center;margin-bottom:40px;">
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary-container);margin-bottom:10px;">/// Choose Your Protocol</div>
+            <h2 style="font-family:var(--font-heading);font-size:clamp(24px,4vw,36px);font-weight:700;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 12px;">Membership Plans</h2>
+            <p style="font-size:14px;color:var(--color-on-surface-variant);">Select the commitment level that matches your training goals.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+            @forelse($plans as $i => $plan)
+            <div style="background:var(--color-surface-low);border-radius:12px;padding:24px;border:1px solid {{ $i===1 ? 'var(--color-primary-container)' : 'var(--color-surface-highest)' }};{{ $i===1 ? 'box-shadow:var(--glow-green);' : '' }}position:relative;display:flex;flex-direction:column;">
+                @if($i===1)<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--color-primary-container);color:var(--color-on-primary);font-family:var(--font-heading);font-size:10px;letter-spacing:.06em;padding:2px 12px;border-radius:999px;text-transform:uppercase;white-space:nowrap;">Most Popular</div>@endif
+                <div style="font-family:var(--font-heading);font-size:18px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);margin-bottom:8px;">{{ $plan->name }}</div>
+                <div style="font-family:var(--font-heading);font-size:40px;font-weight:700;color:var(--color-primary-container);margin-bottom:4px;">PKR {{ number_format($plan->price) }}</div>
+                <div style="font-size:12px;color:var(--color-outline);margin-bottom:20px;">{{ $plan->duration_days }} days access</div>
+                <ul style="list-style:none;padding:0;margin:0 0 24px;flex:1;display:flex;flex-direction:column;gap:8px;">
+                    @foreach(($plan->features ?? []) as $feat)
+                    <li style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--color-on-surface-variant);">
+                        <span class="material-symbols-outlined" style="font-size:16px;color:var(--color-primary-container);">check_circle</span>
+                        {{ $feat }}
+                    </li>
+                    @endforeach
+                </ul>
+                @auth
+                <a href="{{ auth()->user()->dashboardRoute() }}" class="{{ $i===1 ? 'btn-primary' : 'btn-ghost' }}" style="text-align:center;justify-content:center;">Go to Dashboard</a>
+                @else
+                <a href="{{ route('login') }}" class="{{ $i===1 ? 'btn-primary' : 'btn-ghost' }}" style="text-align:center;justify-content:center;">Join Now</a>
+                @endauth
+            </div>
+            @empty
+            <div style="grid-column:1/-1;text-align:center;color:var(--color-outline);">No plans available.</div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+{{-- ── TRAINERS ──────────────────────────────────────────────── --}}
+<section id="trainers" style="background:var(--color-surface);padding:64px 0;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
+        <div style="text-align:center;margin-bottom:40px;">
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary-container);margin-bottom:10px;">/// Expert Coaching Staff</div>
+            <h2 style="font-family:var(--font-heading);font-size:clamp(24px,4vw,36px);font-weight:700;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 12px;">Our Trainers</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+            @forelse($trainers as $trainer)
+            <div style="background:var(--color-surface-low);border-radius:12px;padding:24px;text-align:center;border:1px solid var(--color-surface-highest);transition:border-color .2s,box-shadow .2s;" onmouseover="this.style.borderColor='var(--color-primary-container)';this.style.boxShadow='var(--glow-green)'" onmouseout="this.style.borderColor='var(--color-surface-highest)';this.style.boxShadow='none'">
+                <div style="width:72px;height:72px;border-radius:50%;background:var(--color-surface-container);border:2px solid var(--color-outline-variant);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:24px;font-weight:700;color:var(--color-primary-container);margin:0 auto 14px;">{{ $trainer->initials() }}</div>
+                <div style="font-family:var(--font-heading);font-size:16px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);margin-bottom:6px;">{{ $trainer->user->name }}</div>
+                <div style="font-size:12px;color:var(--color-primary-container);margin-bottom:8px;">{{ $trainer->specialization }}</div>
+                @if($trainer->bio)<p style="font-size:11px;color:var(--color-outline);margin:0;">{{ Str::limit($trainer->bio, 80) }}</p>@endif
+            </div>
+            @empty
+            <div style="grid-column:1/-1;text-align:center;color:var(--color-outline);">No trainers found.</div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+{{-- ── CTA ───────────────────────────────────────────────────── --}}
+<section style="background:var(--color-surface-lowest);padding:80px 0;text-align:center;">
+    <div style="max-width:600px;margin:0 auto;padding:0 32px;">
+        <div style="width:60px;height:60px;border-radius:12px;background:var(--color-primary-container);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+            <span class="material-symbols-outlined" style="font-size:32px;color:var(--color-on-primary);">bolt</span>
+        </div>
+        <h2 style="font-family:var(--font-heading);font-size:clamp(28px,4vw,44px);font-weight:700;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 16px;">Ready to Start?</h2>
+        <p style="font-size:15px;color:var(--color-on-surface-variant);margin-bottom:32px;">Join Kinetic Apex today and transform your performance with elite coaching, structured nutrition, and a community built for results.</p>
+        @auth
+        <a href="{{ auth()->user()->dashboardRoute() }}" class="btn-primary" style="padding:16px 40px;font-size:15px;">
+            <span class="material-symbols-outlined" style="font-size:20px;">dashboard</span>
+            Go to My Dashboard
+        </a>
+        @else
+        <a href="{{ route('login') }}" class="btn-primary" style="padding:16px 40px;font-size:15px;">
+            <span class="material-symbols-outlined" style="font-size:20px;">login</span>
+            Member Login
+        </a>
+        @endauth
+    </div>
+</section>
+
+@push('scripts')
+<style>
+@media(max-width:768px){
+    div[style*="grid-template-columns:7fr 5fr"]{grid-template-columns:1fr!important;}
+    div[style*="grid-template-columns:7fr 5fr"] > div:last-child{display:none;}
+}
+</style>
+@endpush
+@endsection
