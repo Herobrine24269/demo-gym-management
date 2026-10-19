@@ -3,63 +3,61 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Addon;
 use Illuminate\Http\Request;
 
 class AddonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $addons = Addon::latest()->paginate(20);
+        return view('admin.addons.index', compact('addons'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.addons.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name'        => 'required|string|max:150',
+            'category'    => 'nullable|string|max:80',
+            'price'       => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+        ]);
+        $data['is_active'] = $request->boolean('is_active');
+        Addon::create($data);
+        return redirect()->route('admin.addons.index')->with('success', 'Add-on created.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Addon $addon)
     {
-        //
+        return view('admin.addons.index'); // no dedicated show page
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Addon $addon)
     {
-        //
+        return view('admin.addons.edit', compact('addon'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Addon $addon)
     {
-        //
+        $data = $request->validate([
+            'name'        => 'required|string|max:150',
+            'category'    => 'nullable|string|max:80',
+            'price'       => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+        ]);
+        $data['is_active'] = $request->boolean('is_active');
+        $addon->update($data);
+        return redirect()->route('admin.addons.index')->with('success', 'Add-on updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Addon $addon)
     {
-        //
+        $addon->delete();
+        return redirect()->route('admin.addons.index')->with('success', 'Add-on deleted.');
     }
 }

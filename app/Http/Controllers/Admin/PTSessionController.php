@@ -3,63 +3,70 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PersonalTrainingSession;
+use App\Models\Member;
+use App\Models\Trainer;
 use Illuminate\Http\Request;
 
 class PTSessionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $sessions = PersonalTrainingSession::with('member.user', 'trainer.user')
+            ->latest('scheduled_at')
+            ->paginate(25);
+        return view('admin.pt-sessions.index', compact('sessions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $members  = Member::with('user')->get();
+        $trainers = Trainer::with('user')->where('is_active', true)->get();
+        return view('admin.pt-sessions.create', compact('members', 'trainers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'member_id'        => 'required|exists:members,id',
+            'trainer_id'       => 'required|exists:trainers,id',
+            'scheduled_at'     => 'required|date',
+            'duration_minutes' => 'nullable|integer|min:30|max:180',
+            'amount'           => 'nullable|numeric|min:0',
+            'notes'            => 'nullable|string',
+        ]);
+        $data['status'] = 'scheduled';
+        PersonalTrainingSession::create($data);
+        return redirect()->route('admin.pt-sessions.index')->with('success', 'PT session booked.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(PersonalTrainingSession $ptSession)
     {
-        //
+        return redirect()->route('admin.pt-sessions.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(PersonalTrainingSession $ptSession)
     {
-        //
+        $session = $ptSession;
+        return view('admin.pt-sessions.edit', compact('session'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, PersonalTrainingSession $ptSession)
     {
-        //
+        $data = $request->validate([
+            'scheduled_at'     => 'required|date',
+            'status'           => 'required|in:scheduled,completed,cancelled,no_show',
+            'duration_minutes' => 'nullable|integer|min:30',
+            'amount'           => 'nullable|numeric|min:0',
+            'notes'            => 'nullable|string',
+        ]);
+        $ptSession->update($data);
+        return redirect()->route('admin.pt-sessions.index')->with('success', 'PT session updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(PersonalTrainingSession $ptSession)
     {
-        //
+        $ptSession->delete();
+        return redirect()->route('admin.pt-sessions.index')->with('success', 'PT session deleted.');
     }
 }
