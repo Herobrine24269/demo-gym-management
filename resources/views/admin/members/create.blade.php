@@ -12,7 +12,7 @@
     </a>
 </div>
 
-<form method="POST" action="{{ route('admin.members.store') }}">
+<form method="POST" action="{{ route('admin.members.store') }}" enctype="multipart/form-data">
 @csrf
 <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;">
 
@@ -20,6 +20,23 @@
     <div style="display:flex;flex-direction:column;gap:16px;">
         <div class="card-dark">
             <div class="section-title" style="font-size:15px;margin-bottom:16px;">Personal Information</div>
+
+            {{-- Optional Avatar Upload --}}
+            <div style="display:flex;align-items:center;gap:16px;padding:12px 16px;background:var(--color-surface-container);border-radius:8px;border:1px solid var(--color-surface-highest);margin-bottom:16px;">
+                <div id="new-member-avatar-box" style="width:56px;height:56px;border-radius:50%;overflow:hidden;background:var(--color-surface-high);border:2px solid var(--color-primary-container);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <img id="new-member-avatar-img" src="" alt="Preview" style="width:100%;height:100%;object-fit:cover;display:none;">
+                    <span id="new-member-avatar-placeholder" class="material-symbols-outlined" style="font-size:24px;color:var(--color-outline);">person</span>
+                </div>
+                <div style="flex:1;">
+                    <div style="font-size:12px;font-weight:600;color:var(--color-on-surface);margin-bottom:2px;">Profile Photo (Optional)</div>
+                    <div style="font-size:11px;color:var(--color-outline);margin-bottom:8px;">Upload photo for member badge and attendance roster.</div>
+                    <label for="create-member-avatar" class="btn-ghost btn-sm" style="cursor:pointer;margin:0;display:inline-flex;padding:4px 10px;font-size:11px;">
+                        <span class="material-symbols-outlined" style="font-size:14px;">upload</span> Choose Photo
+                    </label>
+                    <input type="file" id="create-member-avatar" name="avatar" accept="image/*" style="display:none;" onchange="previewCreateAvatar(this)">
+                </div>
+            </div>
+
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
                 <div style="grid-column:1/-1;">
                     <label class="form-label-dark">Full Name *</label>
@@ -135,6 +152,25 @@ function selectPlan(id, price) {
     document.querySelectorAll('label[onclick]').forEach(l => l.style.borderColor = 'var(--color-surface-highest)');
     event.currentTarget.style.borderColor = 'var(--color-primary-container)';
     document.getElementById('amount_paid').value = price;
+}
+
+function previewCreateAvatar(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewImg = document.getElementById('new-member-avatar-img');
+            const placeholder = document.getElementById('new-member-avatar-placeholder');
+            if (previewImg) {
+                previewImg.src = e.target.result;
+                previewImg.style.display = 'block';
+            }
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+        };
+        reader.readAsDataURL(file);
+    }
 }
 </script>
 @endpush

@@ -11,6 +11,14 @@
         <h1 class="page-title">My Dashboard</h1>
         <p class="page-title-sub">{{ $trainer->specialization ?? 'Performance Coach' }}</p>
     </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <a href="{{ route('trainer.posts.create') }}" class="btn-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">edit_square</span> Write Post
+        </a>
+        <a href="{{ route('trainer.posts.index') }}" class="btn-ghost">
+            <span class="material-symbols-outlined" style="font-size:18px;">article</span> My Posts
+        </a>
+    </div>
 </div>
 
 {{-- Stats --}}
@@ -20,6 +28,7 @@
         ['Active Plans',    $activePlans->count(),       'fitness_center', 'var(--color-primary-container)'],
         ['PT Packages',     $ptSessions->count(),        'sports',         'var(--color-secondary)'],
         ['In Today',        $totalCheckInsToday,         'how_to_reg',     'var(--color-primary-container)'],
+        ['My Posts',        $myPostsCount ?? 0,          'article',        'var(--color-on-surface)'],
     ] as [$lbl,$val,$icon,$clr])
     <div class="stat-card">
         <div style="display:flex;align-items:center;justify-content:space-between;">

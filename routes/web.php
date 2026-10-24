@@ -18,12 +18,16 @@ use App\Http\Controllers\Admin\ExpenseController as AdminExpense;
 use App\Http\Controllers\Admin\ReportController as AdminReport;
 use App\Http\Controllers\Admin\AuditLogController as AdminAuditLog;
 use App\Http\Controllers\Admin\SettingController as AdminSetting;
+use App\Http\Controllers\Admin\ProfileController as AdminProfile;
 use App\Http\Controllers\Admin\PTSessionController as AdminPT;
 use App\Http\Controllers\Receptionist\DashboardController as ReceptionistDashboard;
 use App\Http\Controllers\Receptionist\AttendanceController as ReceptionistAttendance;
 use App\Http\Controllers\Trainer\DashboardController as TrainerDashboard;
 use App\Http\Controllers\Trainer\MemberController as TrainerMember;
 use App\Http\Controllers\Trainer\WorkoutPlanController as TrainerWorkout;
+use App\Http\Controllers\Trainer\PostController as TrainerPost;
+use App\Http\Controllers\Trainer\ProfileController as TrainerProfile;
+use App\Http\Controllers\Frontend\PostController as PublicPostController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboard;
 use App\Http\Controllers\Member\ProfileController as MemberProfile;
 use App\Http\Controllers\Member\AttendanceController as MemberAttendance;
@@ -32,6 +36,8 @@ use App\Http\Controllers\Member\AttendanceController as MemberAttendance;
    PUBLIC ROUTES
    ============================================================ */
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/posts', [PublicPostController::class, 'index'])->name('posts.index');
+Route::get('/posts/{post:slug}', [PublicPostController::class, 'show'])->name('posts.show');
 
 /* ── Auth ──────────────────────────────────────────────────── */
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login')->middleware('guest');
@@ -48,6 +54,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     /* Members */
     Route::resource('members', AdminMember::class);
     Route::get('members/{member}/payments', [AdminMember::class, 'payments'])->name('members.payments');
+    Route::post('members/{member}/call-log', [AdminMember::class, 'callLog'])->name('members.call-log');
 
     /* Trainers */
     Route::resource('trainers', AdminTrainer::class);
@@ -100,6 +107,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     /* Settings */
     Route::get('settings', [AdminSetting::class, 'index'])->name('settings.index');
     Route::post('settings', [AdminSetting::class, 'update'])->name('settings.update');
+
+    /* Admin Profile */
+    Route::get('profile', [AdminProfile::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [AdminProfile::class, 'update'])->name('profile.update');
 });
 
 /* ============================================================
@@ -121,7 +132,13 @@ Route::prefix('trainer')->name('trainer.')->middleware(['auth', 'role:admin,trai
     Route::get('/dashboard', [TrainerDashboard::class, 'index'])->name('dashboard');
     Route::get('/members', [TrainerMember::class, 'index'])->name('members.index');
     Route::get('/members/{member}', [TrainerMember::class, 'show'])->name('members.show');
+    Route::post('/members/{member}/call-log', [TrainerMember::class, 'callLog'])->name('members.call-log');
     Route::resource('workout-plans', TrainerWorkout::class);
+    Route::resource('posts', TrainerPost::class);
+    Route::post('posts/{post}/publish', [TrainerPost::class, 'publish'])->name('posts.publish');
+    /* Trainer Profile */
+    Route::get('/profile', [TrainerProfile::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [TrainerProfile::class, 'update'])->name('profile.update');
 });
 
 /* ============================================================

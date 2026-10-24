@@ -74,10 +74,19 @@
     <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;">
         <div style="width:100%;max-width:440px;background:var(--color-surface-container);border-radius:12px;padding:32px;border:1px solid var(--color-surface-highest);box-shadow:0 24px 64px rgba(0,0,0,.4);">
 
+            {{-- ── BACK BUTTON ────────────────────────────────────── --}}
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                <a href="{{ route('home') }}" class="btn-ghost" style="padding:7px 14px;font-size:12px;border:1px solid var(--color-surface-highest);background:var(--color-surface-low);display:inline-flex;align-items:center;gap:6px;border-radius:6px;text-decoration:none;color:var(--color-on-surface);transition:all .2s;" onmouseover="this.style.borderColor='var(--color-primary-container)';this.style.color='var(--color-primary-container)'" onmouseout="this.style.borderColor='var(--color-surface-highest)';this.style.color='var(--color-on-surface)'">
+                    <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+                    <span>Back to Website</span>
+                </a>
+                <span style="font-family:var(--font-heading);font-size:10px;letter-spacing:.08em;color:var(--color-outline);text-transform:uppercase;">PORTAL GATEWAY</span>
+            </div>
+
             {{-- Form header --}}
             <div style="margin-bottom:24px;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                    <span style="padding:2px 8px;border-radius:3px;background:var(--color-primary-container);color:var(--color-on-primary);font-family:var(--font-heading);font-size:10px;letter-spacing:.08em;font-weight:600;text-transform:uppercase;">PORTAL GATEWAY</span>
+                    <span style="padding:2px 8px;border-radius:3px;background:var(--color-primary-container);color:var(--color-on-primary);font-family:var(--font-heading);font-size:10px;letter-spacing:.08em;font-weight:600;text-transform:uppercase;">ACCESS TERMINAL</span>
                     <span style="font-family:var(--font-heading);font-size:10px;letter-spacing:.08em;color:var(--color-outline);text-transform:uppercase;">SECURE DESK TERMINAL</span>
                 </div>
                 <h1 style="font-family:var(--font-heading);font-size:28px;font-weight:700;text-transform:uppercase;color:var(--color-primary);margin:0 0 6px;">MEMBER & STAFF ACCESS</h1>

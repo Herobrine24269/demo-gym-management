@@ -10,18 +10,40 @@
     <a href="{{ route('admin.trainers.index') }}" class="btn-ghost">← Back</a>
 </div>
 <div style="max-width:640px;">
-    <form method="POST" action="{{ route('admin.trainers.store') }}">
+    <form method="POST" action="{{ route('admin.trainers.store') }}" enctype="multipart/form-data">
     @csrf
     <div class="card-dark">
         <div class="section-title" style="font-size:15px;margin-bottom:16px;">Trainer Details</div>
+
+        {{-- Profile Photo Upload --}}
+        <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--color-surface-container);border-radius:8px;border:1px solid var(--color-surface-highest);margin-bottom:20px;">
+            <div id="trainer-avatar-box" style="width:72px;height:72px;border-radius:50%;overflow:hidden;background:var(--color-surface-high);border:2px solid var(--color-primary-container);box-shadow:var(--glow-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <img id="trainer-avatar-img" src="" alt="Preview" style="width:100%;height:100%;object-fit:cover;display:none;">
+                <span id="trainer-avatar-icon" class="material-symbols-outlined" style="font-size:28px;color:var(--color-outline);">person</span>
+            </div>
+            <div style="flex:1;">
+                <div style="font-family:var(--font-heading);font-size:13px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);margin-bottom:4px;">
+                    Profile Photo <span style="color:var(--color-outline);font-size:11px;text-transform:none;">(Optional)</span>
+                </div>
+                <div style="font-size:11px;color:var(--color-outline);margin-bottom:10px;">Upload trainer photo for profile, member roster &amp; home page showcase.</div>
+                <label for="trainer-avatar-input" class="btn-primary btn-sm" style="cursor:pointer;margin:0;">
+                    <span class="material-symbols-outlined" style="font-size:16px;">upload</span> Choose Photo
+                </label>
+                <input type="file" id="trainer-avatar-input" name="avatar" accept="image/*" style="display:none;" onchange="previewTrainerAvatar(this)">
+                @error('avatar')<div style="font-size:12px;color:var(--color-error);margin-top:6px;">{{ $message }}</div>@enderror
+            </div>
+        </div>
+
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
             <div style="grid-column:1/-1;">
                 <label class="form-label-dark">Full Name *</label>
-                <input type="text" name="name" class="form-control-dark" value="{{ old('name') }}" required>
+                <input type="text" name="name" class="form-control-dark {{ $errors->has('name') ? 'is-invalid' : '' }}" value="{{ old('name') }}" required>
+                @error('name')<div class="invalid-feedback-dark">{{ $message }}</div>@enderror
             </div>
             <div>
                 <label class="form-label-dark">Email *</label>
-                <input type="email" name="email" class="form-control-dark" value="{{ old('email') }}" required>
+                <input type="email" name="email" class="form-control-dark {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') }}" required>
+                @error('email')<div class="invalid-feedback-dark">{{ $message }}</div>@enderror
             </div>
             <div>
                 <label class="form-label-dark">Phone</label>
@@ -29,7 +51,8 @@
             </div>
             <div>
                 <label class="form-label-dark">Password *</label>
-                <input type="password" name="password" class="form-control-dark" required placeholder="Min. 6 characters">
+                <input type="password" name="password" class="form-control-dark {{ $errors->has('password') ? 'is-invalid' : '' }}" required placeholder="Min. 6 characters">
+                @error('password')<div class="invalid-feedback-dark">{{ $message }}</div>@enderror
             </div>
             <div>
                 <label class="form-label-dark">Hire Date *</label>
@@ -37,7 +60,7 @@
             </div>
             <div style="grid-column:1/-1;">
                 <label class="form-label-dark">Specialization</label>
-                <input type="text" name="specialization" class="form-control-dark" value="{{ old('specialization') }}" placeholder="e.g. Strength & Conditioning">
+                <input type="text" name="specialization" class="form-control-dark" value="{{ old('specialization') }}" placeholder="e.g. Strength &amp; Conditioning">
             </div>
             <div>
                 <label class="form-label-dark">Monthly Salary (PKR)</label>
@@ -57,4 +80,22 @@
     </div>
     </form>
 </div>
+
+@push('scripts')
+<script>
+function previewTrainerAvatar(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img  = document.getElementById('trainer-avatar-img');
+            const icon = document.getElementById('trainer-avatar-icon');
+            img.src = e.target.result;
+            img.style.display = 'block';
+            if (icon) icon.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+@endpush
 @endsection

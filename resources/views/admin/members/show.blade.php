@@ -8,10 +8,45 @@
         <h1 class="page-title">{{ $member->user->name }}</h1>
         <p class="page-title-sub">{{ $member->member_code }} · Joined {{ $member->joined_at->format('d M Y') }}</p>
     </div>
-    <div style="display:flex;gap:10px;">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <button type="button"
+            onclick="triggerCallLog(this)"
+            data-member-id="{{ $member->id }}"
+            data-name="{{ $member->user->name }}"
+            data-code="{{ $member->member_code }}"
+            data-phone="{{ $member->user->phone ?? '' }}"
+            data-email="{{ $member->user->email ?? '' }}"
+            data-post-url="{{ route('admin.members.call-log', $member) }}"
+            data-logs="{{ json_encode($member->followUps->sortByDesc('followed_up_at')->values()->map(fn($f) => [
+                'outcome' => $f->outcome,
+                'notes' => $f->notes,
+                'date' => $f->followed_up_at ? $f->followed_up_at->format('d M Y, h:i A') : '',
+                'caller' => $f->caller->name ?? 'Staff'
+            ])) }}"
+            class="btn-primary"
+            style="gap:6px;">
+            <span class="material-symbols-outlined" style="font-size:18px;">call</span> Call Log
+        </button>
+
+        <a href="mailto:{{ $member->user->email }}?subject={{ urlencode('Kinetic Apex — Message for ' . $member->user->name) }}"
+           class="btn-ghost"
+           style="gap:6px;border:1px solid rgba(129,207,255,0.3);color:var(--color-secondary);"
+           target="_blank">
+            <span class="material-symbols-outlined" style="font-size:18px;">mail</span> Email
+        </a>
+
         <a href="{{ route('admin.members.edit', $member) }}" class="btn-ghost">
             <span class="material-symbols-outlined" style="font-size:18px;">edit</span> Edit
         </a>
+
+        <form method="POST" action="{{ route('admin.members.destroy', $member) }}" style="margin:0;display:inline;" onsubmit="return confirm('Permanently delete member &quot;{{ addslashes($member->user->name) }}&quot; ({{ $member->member_code }})?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn-danger" style="gap:6px;">
+                <span class="material-symbols-outlined" style="font-size:18px;">delete</span> Delete
+            </button>
+        </form>
+
         <a href="{{ route('admin.members.index') }}" class="btn-ghost">← Back</a>
     </div>
 </div>
@@ -22,7 +57,13 @@
     <div style="display:flex;flex-direction:column;gap:16px;">
         {{-- Profile card --}}
         <div class="card-dark" style="text-align:center;">
-            <div style="width:72px;height:72px;border-radius:50%;background:var(--color-surface-container);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--color-primary-container);margin:0 auto 12px;">{{ $member->initials() }}</div>
+            <div style="width:72px;height:72px;border-radius:50%;background:var(--color-surface-container);border:2px solid var(--color-primary-container);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--color-primary-container);margin:0 auto 12px;">
+                @if($member->user->avatar_url)
+                    <img src="{{ $member->user->avatar_url }}" alt="{{ $member->user->name }}" style="width:100%;height:100%;object-fit:cover;">
+                @else
+                    {{ $member->initials() }}
+                @endif
+            </div>
             <div style="font-family:var(--font-heading);font-size:18px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);">{{ $member->user->name }}</div>
             <div style="font-size:12px;color:var(--color-outline);margin:4px 0 12px;">{{ $member->user->email }}</div>
             @if($member->user->phone)<div style="font-size:13px;color:var(--color-on-surface-variant);">{{ $member->user->phone }}</div>@endif
@@ -158,6 +199,8 @@
 
     </div>
 </div>
+
+@include('components.call-log-modal')
 
 @push('scripts')
 <style>@media(max-width:900px){div[style*="grid-template-columns:1fr 2fr"]{grid-template-columns:1fr!important;}}</style>

@@ -18,7 +18,8 @@ class DashboardController extends Controller
         $ptSessions  = PersonalTrainingSession::where('trainer_id', $trainer->id)->where('status', 'active')->with('member.user')->get();
         $totalCheckInsToday = Attendance::whereDate('date', today())
             ->whereIn('member_id', $myMembers->pluck('member_id'))->count();
+        $myPostsCount = \App\Models\Post::where('author_id', auth()->id())->count();
 
-        return view('trainer.dashboard', compact('trainer', 'myMembers', 'activePlans', 'ptSessions', 'totalCheckInsToday'));
+        return view('trainer.dashboard', compact('trainer', 'myMembers', 'activePlans', 'ptSessions', 'totalCheckInsToday', 'myPostsCount'));
     }
 }

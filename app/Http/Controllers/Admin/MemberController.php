@@ -14,12 +14,14 @@ use App\Models\Streak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class MemberController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Member::with('user', 'activeMembership.plan', 'streak');
+        $query = Member::with('user', 'activeMembership.plan', 'streak', 'followUps.caller');
 
         if ($search = $request->get('q')) {
             $query->whereHas('user', fn($q) => $q->where('name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%"))
@@ -64,9 +66,15 @@ class MemberController extends Controller
             'amount_paid'    => 'required|numeric|min:0',
             'payment_method' => 'required|in:cash,card,bank_transfer,other',
             'trainer_id'     => 'nullable|exists:trainers,id',
+            'avatar'         => 'nullable|image|max:4096|mimes:jpeg,png,jpg,webp',
         ]);
 
         DB::transaction(function () use ($data, $request) {
+            $avatarPath = null;
+            if ($request->hasFile('avatar')) {
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            }
+
             // Create user
             $user = User::create([
                 'name'     => $data['name'],
@@ -74,6 +82,7 @@ class MemberController extends Controller
                 'phone'    => $data['phone'],
                 'password' => Hash::make($data['password']),
                 'role'     => 'member',
+                'avatar'   => $avatarPath,
             ]);
 
             // Generate member code
@@ -157,7 +166,10 @@ class MemberController extends Controller
     {
         $data = $request->validate([
             'name'              => 'required|string|max:100',
+            'email'             => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($member->user_id)],
             'phone'             => 'nullable|string|max:20',
+            'avatar'            => 'nullable|image|max:4096|mimes:jpeg,png,jpg,webp',
+            'remove_avatar'     => 'nullable|boolean',
             'gender'            => 'nullable|in:male,female,other',
             'dob'               => 'nullable|date',
             'address'           => 'nullable|string',
@@ -165,7 +177,27 @@ class MemberController extends Controller
             'health_notes'      => 'nullable|string',
         ]);
 
-        $member->user->update(['name' => $data['name'], 'phone' => $data['phone']]);
+        $userData = [
+            'name'  => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+        ];
+
+        if ($request->boolean('remove_avatar')) {
+            if ($member->user->avatar && !str_starts_with($member->user->avatar, 'http')) {
+                Storage::disk('public')->delete($member->user->avatar);
+            }
+            $userData['avatar'] = null;
+        }
+
+        if ($request->hasFile('avatar')) {
+            if ($member->user->avatar && !str_starts_with($member->user->avatar, 'http')) {
+                Storage::disk('public')->delete($member->user->avatar);
+            }
+            $userData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        $member->user->update($userData);
         $member->update([
             'gender'            => $data['gender'],
             'dob'               => $data['dob'],
@@ -174,19 +206,46 @@ class MemberController extends Controller
             'health_notes'      => $data['health_notes'],
         ]);
 
-        return redirect()->route('admin.members.show', $member)->with('success', 'Member updated.');
+        return redirect()->route('admin.members.show', $member)->with('success', 'Member and profile credentials updated.');
     }
 
     public function destroy(Member $member)
     {
-        $member->user->delete();
-        $member->delete();
-        return redirect()->route('admin.members.index')->with('success', 'Member deleted.');
+        $memberName = $member->user?->name ?? $member->member_code;
+        $memberCode = $member->member_code;
+
+        DB::transaction(function () use ($member) {
+            $user = $member->user;
+            $member->delete();
+            if ($user) {
+                $user->delete();
+            }
+        });
+
+        return redirect()->route('admin.members.index')->with('success', "Member {$memberName} ({$memberCode}) has been deleted successfully.");
     }
 
     public function payments(Member $member)
     {
         $payments = $member->payments()->latest('paid_at')->paginate(20);
         return view('admin.members.payments', compact('member', 'payments'));
+    }
+
+    public function callLog(Request $request, Member $member)
+    {
+        $request->validate([
+            'outcome' => 'required|in:answered,no_answer,will_return,cancelled',
+            'notes'   => 'nullable|string|max:500',
+        ]);
+
+        \App\Models\FollowUp::create([
+            'member_id'      => $member->id,
+            'called_by'      => auth()->id(),
+            'outcome'        => $request->outcome,
+            'notes'          => $request->notes,
+            'followed_up_at' => now(),
+        ]);
+
+        return back()->with('success', 'Call log recorded for ' . $member->user->name . '.');
     }
 }

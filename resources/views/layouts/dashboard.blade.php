@@ -38,13 +38,19 @@
     </div>
 
     {{-- User footer --}}
+    @php
+        $profileRoute = auth()->user()->isAdmin()
+            ? route('admin.profile.edit')
+            : (auth()->user()->isMember()  ? route('member.profile.edit')
+            : (auth()->user()->isTrainer() ? route('trainer.profile.edit') : '#'));
+    @endphp
     <div class="sidebar-footer">
         <div class="sidebar-user">
-            <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+            <a href="{{ $profileRoute }}" style="display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none;color:inherit;" title="Edit Profile">
                 <div style="position:relative;flex-shrink:0;">
                     <div class="user-avatar">
-                        @if(auth()->user()->avatar)
-                            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                        @if(auth()->user()->avatar_url)
+                            <img src="{{ auth()->user()->avatar_url }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
                         @else
                             <span class="material-symbols-outlined" style="font-size:18px;">person</span>
                         @endif
@@ -55,7 +61,7 @@
                     <div style="font-size:13px;font-weight:600;color:var(--color-on-surface);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ auth()->user()->name }}</div>
                     <div style="font-family:var(--font-heading);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-outline);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ ucfirst(auth()->user()->role) }}</div>
                 </div>
-            </div>
+            </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="topbar-icon-btn" title="Sign out" style="color:var(--color-on-surface-variant);" onmouseover="this.style.color='var(--color-error)'" onmouseout="this.style.color='var(--color-on-surface-variant)'">
@@ -96,13 +102,13 @@
 
         <div style="width:1px;height:24px;background:var(--color-surface-highest);"></div>
 
-        <div class="user-avatar" style="width:32px;height:32px;cursor:pointer;" title="{{ auth()->user()->name }}">
-            @if(auth()->user()->avatar)
-                <img src="{{ asset('storage/' . auth()->user()->avatar) }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+        <a href="{{ $profileRoute }}" class="user-avatar" style="width:32px;height:32px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;overflow:hidden;" title="{{ auth()->user()->name }} — Edit Profile">
+            @if(auth()->user()->avatar_url)
+                <img src="{{ auth()->user()->avatar_url }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
             @else
                 <span class="material-symbols-outlined" style="font-size:16px;">person</span>
             @endif
-        </div>
+        </a>
     </div>
 </header>
 

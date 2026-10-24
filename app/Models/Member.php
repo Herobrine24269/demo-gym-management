@@ -47,6 +47,7 @@ class Member extends Model
     public function getEmailAttribute() { return $this->user->email ?? ''; }
     public function getPhoneAttribute() { return $this->user->phone ?? ''; }
     public function getAvatarAttribute(){ return $this->user->avatar ?? null; }
+    public function getAvatarUrlAttribute(){ return $this->user?->avatar_url ?? null; }
 
     public function initials(): string
     {

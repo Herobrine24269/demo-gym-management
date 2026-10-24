@@ -7,6 +7,8 @@ use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class TrainerController extends Controller
 {
@@ -32,7 +34,13 @@ class TrainerController extends Controller
             'bio'            => 'nullable|string',
             'salary'         => 'nullable|numeric|min:0',
             'hired_at'       => 'required|date',
+            'avatar'         => 'nullable|image|max:4096|mimes:jpeg,png,jpg,webp',
         ]);
+
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
 
         $user = User::create([
             'name'     => $data['name'],
@@ -40,6 +48,7 @@ class TrainerController extends Controller
             'phone'    => $data['phone'],
             'password' => Hash::make($data['password']),
             'role'     => 'trainer',
+            'avatar'   => $avatarPath,
         ]);
 
         Trainer::create([
@@ -75,9 +84,27 @@ class TrainerController extends Controller
             'bio'            => 'nullable|string',
             'salary'         => 'nullable|numeric|min:0',
             'is_active'      => 'boolean',
+            'avatar'         => 'nullable|image|max:4096|mimes:jpeg,png,jpg,webp',
+            'remove_avatar'  => 'nullable|boolean',
         ]);
 
-        $trainer->user->update(['name' => $data['name'], 'phone' => $data['phone']]);
+        $userData = ['name' => $data['name'], 'phone' => $data['phone']];
+
+        if ($request->boolean('remove_avatar')) {
+            if ($trainer->user->avatar && !str_starts_with($trainer->user->avatar, 'http')) {
+                Storage::disk('public')->delete($trainer->user->avatar);
+            }
+            $userData['avatar'] = null;
+        }
+
+        if ($request->hasFile('avatar')) {
+            if ($trainer->user->avatar && !str_starts_with($trainer->user->avatar, 'http')) {
+                Storage::disk('public')->delete($trainer->user->avatar);
+            }
+            $userData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        $trainer->user->update($userData);
         $trainer->update([
             'specialization' => $data['specialization'],
             'bio'            => $data['bio'],

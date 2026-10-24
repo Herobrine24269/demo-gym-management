@@ -15,20 +15,20 @@
     {{-- ── Public navbar ──────────────────────────────────────────── --}}
     <nav class="public-nav">
         <div class="public-nav-inner">
-            <div style="display:flex;align-items:center;gap:12px;">
+            <a href="{{ route('home') }}" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
                 <div style="width:36px;height:36px;border-radius:4px;background:var(--color-primary-container);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--color-on-primary);">K</div>
                 <div>
                     <div style="font-family:var(--font-heading);font-size:14px;letter-spacing:.08em;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);">KINETIC <span style="color:var(--color-primary-container);">APEX</span></div>
                     <div style="font-family:var(--font-heading);font-size:10px;letter-spacing:.1em;color:var(--color-outline);text-transform:uppercase;">Athletic Infrastructure</div>
                 </div>
-            </div>
+            </a>
 
             <nav style="display:flex;align-items:center;gap:4px;" class="d-none d-xl-flex">
                 <a href="{{ route('home') }}" class="public-nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-                <a href="#posts" class="public-nav-link">Posts & Guides</a>
-                <a href="#diet-plans" class="public-nav-link">Diet Plans</a>
-                <a href="#plans" class="public-nav-link">Membership Plans</a>
-                <a href="#trainers" class="public-nav-link">Trainers</a>
+                <a href="{{ route('posts.index') }}" class="public-nav-link {{ request()->routeIs('posts.*') ? 'active' : '' }}">Posts & Guides</a>
+                <a href="{{ route('home') }}#diet-plans" class="public-nav-link">Diet Plans</a>
+                <a href="{{ route('home') }}#plans" class="public-nav-link">Membership Plans</a>
+                <a href="{{ route('home') }}#trainers" class="public-nav-link">Trainers</a>
             </nav>
 
             <div style="display:flex;align-items:center;gap:10px;">

@@ -84,4 +84,21 @@
         <span class="material-symbols-outlined">settings</span>
         <span>Settings</span>
     </a>
+
+    <a href="{{ route('admin.profile.edit') }}" class="nav-link-dark {{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span>My Profile</span>
+    </a>
+</div>
+
+<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--color-surface-highest);">
+    <div class="sidebar-section-label">PUBLIC PLATFORM</div>
+    <a href="{{ route('posts.index') }}" target="_blank" class="nav-link-dark">
+        <span class="material-symbols-outlined">article</span>
+        <span>Visitor Posts Feed</span>
+    </a>
+    <a href="{{ route('home') }}" target="_blank" class="nav-link-dark">
+        <span class="material-symbols-outlined">public</span>
+        <span>Gym Homepage</span>
+    </a>
 </div>
