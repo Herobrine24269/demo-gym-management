@@ -37,6 +37,10 @@ use App\Http\Controllers\Member\AttendanceController as MemberAttendance;
    ============================================================ */
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/posts', [PublicPostController::class, 'index'])->name('posts.index');
+
+use App\Http\Controllers\DietPlanController;
+Route::get('/diet-plans', [DietPlanController::class, 'index'])->name('diet-plans.index');
+Route::get('/diet-plans/{dietPlan}', [DietPlanController::class, 'show'])->name('diet-plans.show');
 Route::get('/posts/{post:slug}', [PublicPostController::class, 'show'])->name('posts.show');
 
 /* ── Auth ──────────────────────────────────────────────────── */
