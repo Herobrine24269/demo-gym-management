@@ -31,6 +31,22 @@
         <span>Payments</span>
     </a>
 
+    <a href="{{ route('admin.payment-methods.index') }}" class="nav-link-dark {{ request()->routeIs('admin.payment-methods.*') ? 'active' : '' }}">
+        <span class="material-symbols-outlined">account_balance_wallet</span>
+        <span>Payment Methods</span>
+    </a>
+
+    <a href="{{ route('admin.payment-requests.index') }}" class="nav-link-dark {{ request()->routeIs('admin.payment-requests.*') ? 'active' : '' }}">
+        <span class="material-symbols-outlined">pending_actions</span>
+        <span>Payment Requests</span>
+        @php $pendingReqs = \App\Models\PaymentSubmission::pending()->count(); @endphp
+        @if($pendingReqs > 0)
+            <span class="badge-accent" style="margin-left:auto;background:var(--color-primary);color:#000;font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px;">
+                {{ $pendingReqs }}
+            </span>
+        @endif
+    </a>
+
     <a href="{{ route('admin.renewals.index') }}" class="nav-link-dark {{ request()->routeIs('admin.renewals.*') ? 'active' : '' }}">
         <span class="material-symbols-outlined">autorenew</span>
         <span>Renewals</span>
@@ -93,11 +109,11 @@
 
 <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--color-surface-highest);">
     <div class="sidebar-section-label">PUBLIC PLATFORM</div>
-    <a href="{{ route('posts.index') }}" target="_blank" class="nav-link-dark">
+    <a href="{{ route('posts.index') }}" class="nav-link-dark">
         <span class="material-symbols-outlined">article</span>
         <span>Visitor Posts Feed</span>
     </a>
-    <a href="{{ route('home') }}" target="_blank" class="nav-link-dark">
+    <a href="{{ route('home') }}" class="nav-link-dark">
         <span class="material-symbols-outlined">public</span>
         <span>Gym Homepage</span>
     </a>

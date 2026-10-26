@@ -9,8 +9,8 @@
         <p class="page-title-sub">Publish protocols, workout directives, and nutrition blueprints for public visitor frontend</p>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <a href="{{ route('posts.index') }}" target="_blank" class="btn-ghost">
-            <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span> Public Feed
+        <a href="{{ route('posts.index') }}" class="btn-ghost">
+            <span class="material-symbols-outlined" style="font-size:18px;">article</span> Public Feed
         </a>
         <a href="{{ route('admin.posts.create') }}" class="btn-primary">
             <span class="material-symbols-outlined" style="font-size:18px;">add</span> Write New Post

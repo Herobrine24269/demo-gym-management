@@ -7,6 +7,16 @@
         <span>My Dashboard</span>
     </a>
 
+    <a href="{{ route('member.renewals.index') }}" class="nav-link-dark {{ request()->routeIs('member.renewals.*') ? 'active' : '' }}">
+        <span class="material-symbols-outlined">autorenew</span>
+        <span>Renew Membership</span>
+    </a>
+
+    <a href="{{ route('member.payments.index') }}" class="nav-link-dark {{ request()->routeIs('member.payments.*') ? 'active' : '' }}">
+        <span class="material-symbols-outlined">receipt_long</span>
+        <span>My Payments &amp; Billing</span>
+    </a>
+
     <a href="{{ route('member.attendance.index') }}" class="nav-link-dark {{ request()->routeIs('member.attendance.*') ? 'active' : '' }}">
         <span class="material-symbols-outlined">calendar_month</span>
         <span>My Attendance</span>

@@ -63,7 +63,7 @@ class PostSeeder extends Seeder
                 'muscle-gain',
                 'Creatine Loading Phase: Science vs Myths',
                 'Evidence-based breakdown of creatine monohydrate supplementation timing, dosing and cycling.',
-                null,
+                'posts/creatine-guide.jpg',
                 $admin?->id ?? 1,
                 '<h2>Demystifying the Most Researched Ergogenic Aid in Sports History</h2><p>Creatine monohydrate is unmatched in its efficacy for phosphocreatine resynthesis during high-intensity anaerobic efforts. Yet, widespread myths regarding hydration, renal strain, and mandatory cycling persist in modern gym culture.</p><h3>To Load or Not to Load?</h3><p>The traditional 20g/day loading protocol (split into 4 doses of 5g for 5-7 days) achieves intramuscular saturation in approximately one week. Alternatively, consuming 3-5g daily will achieve identical saturation levels within 21 to 28 days with zero gastrointestinal discomfort.</p><h3>Timing and Synergy</h3><p>Post-workout ingestion accompanied by 30-50g of fast-acting carbohydrates enhances sodium-dependent creatine transporter (CreaT) uptake via insulin-mediated cellular signalling.</p>',
                 4
@@ -72,7 +72,7 @@ class PostSeeder extends Seeder
                 'workout-guides',
                 'Romanian Deadlift Form Guide for Maximum Hamstring Growth',
                 'Step-by-step breakdown of RDL mechanics with common errors and cue corrections.',
-                null,
+                'posts/deadlift-guide.jpg',
                 $trainer?->id ?? 1,
                 '<h2>Mastering Hip Hinge Biomechanics for Posterior Chain Dominance</h2><p>The Romanian Deadlift (RDL) is the premier compound movement for loaded eccentric lengthening of the biceps femoris, semitendinosus, and gluteus maximus.</p><h3>Core Execution Cues</h3><ul><li><strong>Soft Knees:</strong> Maintain a 15-20 degree knee flexion angle throughout the eccentric excursion. The knee angle must remain constant.</li><li><strong>Push Hips to Wall:</strong> Initiate the movement by translating the pelvis posteriorly rather than bending forwards at the lumbar spine.</li><li><strong>Lat Engagement:</strong> \"Protect your armpits\" by engaging the lats, keeping the barbell dragged tightly against the thighs and shins.</li></ul><p>Reverse the motion once your hamstrings reach full active range of motion (usually mid-shin level). Do not force extra depth through lumbar flexion.</p>',
                 5

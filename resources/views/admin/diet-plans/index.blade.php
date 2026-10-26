@@ -15,10 +15,18 @@
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
     @forelse($plans as $plan)
     <div class="card-dark" style="display:flex;flex-direction:column;">
+        @if($plan->cover_image_url)
+        <div style="height:120px;margin:-16px -16px 14px -16px;border-radius:12px 12px 0 0;overflow:hidden;position:relative;">
+            <img src="{{ $plan->cover_image_url }}" alt="{{ $plan->title ?? $plan->name }}" style="width:100%;height:100%;object-fit:cover;">
+            <span class="badge-green" style="position:absolute;top:10px;left:10px;font-size:9px;text-transform:uppercase;">
+                {{ str_replace('_', ' ', $plan->goal ?? 'Nutrition') }}
+            </span>
+        </div>
+        @endif
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">
             <div>
-                <div style="font-family:var(--font-heading);font-size:16px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);">{{ $plan->name }}</div>
-                <div style="font-size:12px;color:var(--color-primary-container);">{{ $plan->goal }}</div>
+                <div style="font-family:var(--font-heading);font-size:16px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);">{{ $plan->title ?? $plan->name }}</div>
+                <div style="font-size:12px;color:var(--color-primary-container);">{{ str_replace('_', ' ', $plan->goal) }}</div>
             </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">

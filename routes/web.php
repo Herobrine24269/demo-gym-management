@@ -71,6 +71,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('payments/{payment}', [AdminPayment::class, 'show'])->name('payments.show');
     Route::post('payments/{payment}/refund', [AdminPayment::class, 'refund'])->name('payments.refund');
 
+    /* Payment Methods */
+    Route::get('payment-methods', [\App\Http\Controllers\Admin\PaymentMethodController::class, 'index'])->name('payment-methods.index');
+    Route::put('payment-methods', [\App\Http\Controllers\Admin\PaymentMethodController::class, 'update'])->name('payment-methods.update');
+    Route::get('payment-submissions/{submission}/screenshot', [\App\Http\Controllers\Member\PaymentController::class, 'viewScreenshot'])->name('payment-submissions.screenshot');
+
+    /* Payment Requests (Approvals strictly Admin) */
+    Route::post('payment-requests/{submission}/approve', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'approve'])->name('payment-requests.approve');
+    Route::post('payment-requests/{submission}/reject', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'reject'])->name('payment-requests.reject');
+
     /* Renewals */
     Route::get('renewals', [AdminRenewal::class, 'index'])->name('renewals.index');
     Route::post('renewals', [AdminRenewal::class, 'store'])->name('renewals.store');
@@ -153,4 +162,22 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'role:member,admin
     Route::get('/profile', [MemberProfile::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [MemberProfile::class, 'update'])->name('profile.update');
     Route::get('/attendance', [MemberAttendance::class, 'index'])->name('attendance.index');
+
+    /* Renewals & Payments */
+    Route::get('/renewals', [\App\Http\Controllers\Member\RenewalController::class, 'index'])->name('renewals.index');
+    Route::post('/renewals', [\App\Http\Controllers\Member\RenewalController::class, 'store'])->name('renewals.store')->middleware('throttle:10,1');
+    Route::get('/payments', [\App\Http\Controllers\Member\PaymentController::class, 'index'])->name('payments.index');
+    Route::get('/payments/{submission}/receipt', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'receipt'])->name('payments.receipt');
+    Route::get('/payments/{submission}/receipt-pdf', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'receiptPdf'])->name('payments.receipt-pdf');
+    Route::get('/payment-submissions/{submission}/screenshot', [\App\Http\Controllers\Member\PaymentController::class, 'viewScreenshot'])->name('payment-submissions.screenshot');
+});
+
+/* ============================================================
+   PAYMENT REQUESTS (Admin & Receptionist if enabled)
+   ============================================================ */
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,receptionist'])->group(function () {
+    Route::get('payment-requests', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'index'])->name('payment-requests.index');
+    Route::get('payment-requests/{submission}', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'show'])->name('payment-requests.show');
+    Route::get('payment-requests/{submission}/receipt', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'receipt'])->name('payment-requests.receipt');
+    Route::get('payment-requests/{submission}/receipt-pdf', [\App\Http\Controllers\Admin\PaymentRequestController::class, 'receiptPdf'])->name('payment-requests.receipt-pdf');
 });

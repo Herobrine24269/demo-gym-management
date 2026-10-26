@@ -60,6 +60,18 @@
         </div>
         <span class="material-symbols-outlined" style="color:var(--color-outline);font-size:16px;">arrow_forward</span>
     </a>
+    <a href="{{ route('admin.payment-requests.index') }}" class="quick-action-btn" style="text-decoration:none;">
+        <div style="display:flex;align-items:center;gap:10px;">
+            <span class="material-symbols-outlined" style="color:var(--color-primary);font-size:20px;">pending_actions</span>
+            <span style="font-family:var(--font-heading);font-size:11px;letter-spacing:.06em;font-weight:700;text-transform:uppercase;white-space:nowrap;">Payment Requests</span>
+        </div>
+        @php $pendingRequestsDashboard = \App\Models\PaymentSubmission::pending()->count(); @endphp
+        @if($pendingRequestsDashboard > 0)
+            <span style="font-family:var(--font-heading);font-size:10px;padding:2px 8px;border-radius:999px;background:var(--color-primary);color:#000;font-weight:800;">{{ $pendingRequestsDashboard }}</span>
+        @else
+            <span class="material-symbols-outlined" style="color:var(--color-outline);font-size:16px;">arrow_forward</span>
+        @endif
+    </a>
     <a href="{{ route('admin.trainers.index') }}" class="quick-action-btn" style="text-decoration:none;">
         <div style="display:flex;align-items:center;gap:10px;">
             <span class="material-symbols-outlined" style="color:var(--color-on-surface-variant);font-size:20px;">sports_gymnastics</span>

@@ -23,7 +23,10 @@ class SettingController extends Controller
             'gym_address'              => 'nullable|string',
             'inactive_threshold_days'  => 'required|integer|min:1|max:60',
             'renewal_alert_days'       => 'required|integer|min:1|max:30',
+            'receptionist_can_view_payment_requests' => 'nullable',
         ]);
+
+        $data['receptionist_can_view_payment_requests'] = $request->boolean('receptionist_can_view_payment_requests') ? '1' : '0';
 
         foreach ($data as $key => $value) {
             GymSetting::set($key, $value);

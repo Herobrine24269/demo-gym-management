@@ -19,12 +19,18 @@
         <h1 class="page-title">Welcome, {{ explode(' ', auth()->user()->name)[0] }}!</h1>
         <p class="page-title-sub">{{ $member->member_code }} · Member since {{ $member->joined_at->format('F Y') }}</p>
     </div>
-    @if($ms)
-    <div style="text-align:right;">
-        <div class="badge-active" style="font-size:12px;padding:4px 12px;">{{ $ms->plan->name }}</div>
-        <div style="font-size:11px;color:var(--color-outline);margin-top:4px;">Expires {{ $ms->end_date->format('d M Y') }} · {{ $ms->daysRemaining() }}d left</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        @if($ms)
+        <div style="text-align:right;">
+            <div class="badge-active" style="font-size:12px;padding:4px 12px;">{{ $ms->plan->name }}</div>
+            <div style="font-size:11px;color:var(--color-outline);margin-top:4px;">Expires {{ $ms->end_date->format('d M Y') }} · {{ $ms->daysRemaining() }}d left</div>
+        </div>
+        @endif
+        <a href="{{ route('member.renewals.index') }}" class="btn-primary" style="padding:10px 18px;font-size:12px;">
+            <span class="material-symbols-outlined" style="font-size:16px;">autorenew</span>
+            Renew Plan
+        </a>
     </div>
-    @endif
 </div>
 
 {{-- Stat cards --}}
@@ -251,9 +257,14 @@
                 </div>
             </div>
 
-            <div style="margin-top:16px;padding:10px 12px;border-radius:6px;background:rgba(0,169,232,.08);border:1px solid rgba(0,169,232,.2);font-size:11px;color:var(--color-outline);display:flex;align-items:center;gap:8px;">
-                <span class="material-symbols-outlined" style="font-size:16px;color:var(--color-secondary);">info</span>
-                <span>For online transfers, share transaction slip via desk counter for immediate credit.</span>
+            <div style="margin-top:16px;padding:12px 14px;border-radius:6px;background:rgba(57,255,20,.06);border:1px solid rgba(57,255,20,.2);font-size:12px;color:var(--color-on-surface-variant);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="material-symbols-outlined" style="font-size:16px;color:var(--color-primary-container);">info</span>
+                    <span>Paid via Easypaisa, JazzCash, or Bank?</span>
+                </div>
+                <a href="{{ route('member.renewals.index') }}" style="color:var(--color-primary-container);font-weight:600;text-decoration:none;font-size:11px;font-family:var(--font-heading);letter-spacing:.05em;text-transform:uppercase;">
+                    Submit Payment Proof Online →
+                </a>
             </div>
         </div>
 
@@ -264,7 +275,10 @@
                     <span class="material-symbols-outlined" style="font-size:20px;color:var(--color-secondary);">receipt_long</span>
                     <div class="section-title" style="font-size:15px;">Transaction History & Receipts</div>
                 </div>
-                <span style="font-size:11px;color:var(--color-outline);">{{ $recentPayments->count() }} records</span>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:11px;color:var(--color-outline);">{{ $recentPayments->count() }} records</span>
+                    <a href="{{ route('member.payments.index') }}" class="btn-ghost btn-sm" style="font-size:11px;padding:3px 8px;">View All →</a>
+                </div>
             </div>
 
             <div style="overflow-x:auto;flex:1;">

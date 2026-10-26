@@ -18,15 +18,15 @@ class DietPlanSeeder extends Seeder
         $members = Member::take(20)->get();
 
         $dietTitles = [
-            ['Anabolic Mass Builder 3200', 'muscle_gain',   3200, 220, 320, 90],
-            ['Shred Protocol 1800',        'weight_loss',   1800, 180, 120, 55],
-            ['Athletic Performance 2800',  'performance',   2800, 200, 300, 80],
-            ['Clean Bulk 2600',            'maintenance',   2600, 190, 280, 75],
+            ['Anabolic Mass Builder 3200', 'muscle_gain',   3200, 220, 320, 90, 'diet-plans/diet-mass-builder.jpg'],
+            ['Shred Protocol 1800',        'weight_loss',   1800, 180, 120, 55, 'diet-plans/diet-shred-protocol.jpg'],
+            ['Athletic Performance 2800',  'performance',   2800, 200, 300, 80, 'diet-plans/diet-athletic-performance.jpg'],
+            ['Clean Bulk 2600',            'maintenance',   2600, 190, 280, 75, 'diet-plans/diet-clean-bulk.jpg'],
         ];
 
         $dietPlans = [];
-        foreach ($dietTitles as [$dtitle, $goal, $cal, $pro, $carb, $fat]) {
-            $dp = DietPlan::firstOrCreate(
+        foreach ($dietTitles as [$dtitle, $goal, $cal, $pro, $carb, $fat, $cover]) {
+            $dp = DietPlan::updateOrCreate(
                 ['title' => $dtitle],
                 [
                     'created_by'      => $trainer?->user_id ?? 1,
@@ -35,6 +35,7 @@ class DietPlanSeeder extends Seeder
                     'total_protein_g' => $pro,
                     'total_carbs_g'   => $carb,
                     'total_fat_g'     => $fat,
+                    'cover_image'     => $cover,
                     'is_public'       => true,
                 ]
             );

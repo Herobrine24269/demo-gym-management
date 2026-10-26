@@ -48,6 +48,19 @@
                     <div style="font-size:11px;color:var(--color-outline);margin-top:4px;">Alert when membership expires within this window.</div>
                 </div>
             </div>
+        <div class="card-dark" style="margin-top:16px;">
+            <div class="section-title" style="font-size:15px;margin-bottom:16px;">Staff Access Permissions</div>
+            <div>
+                <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+                    <input type="checkbox" name="receptionist_can_view_payment_requests" value="1" {{ old('receptionist_can_view_payment_requests', $settings['receptionist_can_view_payment_requests'] ?? '0') == '1' ? 'checked' : '' }} style="margin-top:3px;accent-color:var(--color-primary);width:18px;height:18px;">
+                    <div>
+                        <div style="font-size:13px;font-weight:600;color:var(--color-on-surface);">Allow Receptionists to View Payment Requests</div>
+                        <div style="font-size:12px;color:var(--color-outline);margin-top:3px;">
+                            When enabled, receptionists can see submitted payment proofs and pending requests in read-only mode. Approvals and rejections remain strictly restricted to Administrators.
+                        </div>
+                    </div>
+                </label>
+            </div>
         </div>
         <div style="margin-top:16px;">
             <button type="submit" class="btn-primary">

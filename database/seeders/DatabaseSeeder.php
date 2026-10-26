@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ExpenseSeeder::class,
             PostSeeder::class,
             DietPlanSeeder::class,
+            PaymentMethodSeeder::class,
         ]);
 
         $this->command->info('✅ All seeders executed successfully: Settings, Users, Plans, Members, Workouts, Addons, PT Sessions, Expenses, Posts, Diet plans, and Call logs connected.');

@@ -30,8 +30,8 @@
 
 <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--color-surface-highest);">
     <div class="sidebar-section-label">PUBLIC PLATFORM</div>
-    <a href="{{ route('posts.index') }}" target="_blank" class="nav-link-dark">
-        <span class="material-symbols-outlined">open_in_new</span>
+    <a href="{{ route('posts.index') }}" class="nav-link-dark">
+        <span class="material-symbols-outlined">article</span>
         <span>View Public Feed</span>
     </a>
 </div>

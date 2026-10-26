@@ -289,34 +289,103 @@
 </section>
 
 {{-- ── DIET PLANS PREVIEW ──────────────────────────────────────── --}}
-<section id="diet-plans-preview" style="background:var(--color-surface-lowest);padding:64px 0;">
+<section id="diet-plans" style="background:var(--color-surface-lowest);padding:64px 0;">
     <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
-        <div style="text-align:center;margin-bottom:40px;">
-            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary-container);margin-bottom:10px;">
-                /// Nutrition Protocols
-            </div>
-            <h2 style="font-family:var(--font-heading);font-size:clamp(24px,4vw,36px);font-weight:700;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 12px;">
-                Diet Plans
-            </h2>
-            <p style="font-size:14px;color:var(--color-on-surface-variant);">
-                Tailored nutrition programs to complement your training.
-            </p>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
-            @forelse($diets as $diet)
-                <div style="background:var(--color-surface-low);border-radius:12px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,.05);transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='scale(1.02)';this.style.boxShadow='0 8px 20px rgba(57,255,20,.2)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 12px rgba(0,0,0,.05)'")
-                    <h3 style="font-family:var(--font-heading);font-size:16px;font-weight:600;color:var(--color-on-surface);margin:0 0 8px;">
-                        {{ $diet->title ?? $diet->name }}
-                    </h3>
-                    <p style="font-size:13px;color:var(--color-on-surface-variant);margin:0 0 12px;">
-                        {{ Str::limit($diet->goal ?? $diet->description, 100) }}
-                    </p>
-                    <a href="{{ route('diet-plans.show', $diet) }}" class="btn-ghost" style="padding:8px 16px;font-size:12px;">
-                        View Details <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
-                    </a>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:16px;">
+            <div>
+                <div style="display:inline-flex;align-items:center;gap:8px;color:var(--color-primary-container);margin-bottom:8px;">
+                    <span style="font-family:var(--font-heading);font-size:14px;">///</span>
+                    <span style="font-family:var(--font-heading);font-size:11px;letter-spacing:.08em;text-transform:uppercase;">Nutrition Directives</span>
                 </div>
+                <h2 style="font-family:var(--font-heading);font-size:clamp(24px,4vw,36px);font-weight:700;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 8px;">
+                    Diet Plans & Protocols
+                </h2>
+                <p style="font-size:14px;color:var(--color-on-surface-variant);margin:0;">
+                    Tailored nutritional regimens engineered to optimize muscle hypertrophy, fat loss, and athletic performance.
+                </p>
+            </div>
+            <a href="{{ route('diet-plans.index') }}" class="btn-ghost" style="padding:10px 20px;font-size:12px;">
+                View All Diet Plans <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+            </a>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;">
+            @forelse($diets as $diet)
+                <article style="display:flex;flex-direction:column;background:var(--color-surface-low);border-radius:14px;overflow:hidden;border:1px solid var(--color-surface-highest);transition:transform .2s,box-shadow .2s,border-color .2s;"
+                         onmouseover="this.style.borderColor='var(--color-primary-container)';this.style.boxShadow='var(--glow-green)';this.style.transform='translateY(-3px)'"
+                         onmouseout="this.style.borderColor='var(--color-surface-highest)';this.style.boxShadow='none';this.style.transform='none'">
+                    
+                    {{-- Card Cover Image --}}
+                    <div style="height:190px;background:var(--color-surface-container);position:relative;overflow:hidden;">
+                        @if($diet->cover_image_url)
+                            <img src="{{ $diet->cover_image_url }}" alt="{{ $diet->title }}"
+                                 style="width:100%;height:100%;object-fit:cover;transition:transform .4s ease;"
+                                 onmouseover="this.style.transform='scale(1.05)'"
+                                 onmouseout="this.style.transform='scale(1)'">
+                        @else
+                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center, var(--color-surface-high) 0%, var(--color-surface-lowest) 100%);">
+                                <span class="material-symbols-outlined" style="font-size:56px;color:var(--color-surface-highest);">restaurant</span>
+                            </div>
+                        @endif
+                        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(28,27,27,.9) 0%, transparent 60%);"></div>
+                        
+                        {{-- Goal Badge --}}
+                        <div style="position:absolute;top:12px;left:12px;">
+                            <span class="badge-green" style="font-size:10px;text-transform:uppercase;">
+                                {{ str_replace('_', ' ', $diet->goal ?? 'Nutrition') }}
+                            </span>
+                        </div>
+
+                        {{-- Calories Pill --}}
+                        @if($diet->total_calories)
+                        <div style="position:absolute;bottom:10px;right:12px;font-size:11px;font-family:var(--font-heading);font-weight:700;color:var(--color-primary-container);background:rgba(19,19,19,.88);border:1px solid rgba(57,255,20,.3);padding:3px 10px;border-radius:6px;display:flex;align-items:center;gap:4px;">
+                            <span class="material-symbols-outlined" style="font-size:13px;">local_fire_department</span>
+                            {{ number_format($diet->total_calories) }} KCAL
+                        </div>
+                        @endif
+                    </div>
+
+                    {{-- Card Content --}}
+                    <div style="padding:22px;display:flex;flex-direction:column;flex:1;">
+                        <h3 style="font-family:var(--font-heading);font-size:18px;font-weight:600;text-transform:uppercase;color:var(--color-on-surface);margin:0 0 10px;line-height:1.25;">
+                            <a href="{{ route('diet-plans.show', $diet) }}" style="color:var(--color-on-surface);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--color-primary-container)'" onmouseout="this.style.color='var(--color-on-surface)'">
+                                {{ $diet->title ?? $diet->name }}
+                            </a>
+                        </h3>
+
+                        {{-- Macros Row --}}
+                        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;margin-bottom:16px;">
+                            <div style="background:var(--color-surface-container);border-radius:6px;padding:6px 8px;text-align:center;">
+                                <div style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--color-on-surface);">{{ $diet->total_protein_g ?? 0 }}g</div>
+                                <div style="font-size:9px;color:var(--color-outline);text-transform:uppercase;letter-spacing:.05em;">Protein</div>
+                            </div>
+                            <div style="background:var(--color-surface-container);border-radius:6px;padding:6px 8px;text-align:center;">
+                                <div style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--color-on-surface);">{{ $diet->total_carbs_g ?? 0 }}g</div>
+                                <div style="font-size:9px;color:var(--color-outline);text-transform:uppercase;letter-spacing:.05em;">Carbs</div>
+                            </div>
+                            <div style="background:var(--color-surface-container);border-radius:6px;padding:6px 8px;text-align:center;">
+                                <div style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--color-on-surface);">{{ $diet->total_fat_g ?? 0 }}g</div>
+                                <div style="font-size:9px;color:var(--color-outline);text-transform:uppercase;letter-spacing:.05em;">Fats</div>
+                            </div>
+                        </div>
+
+                        <p style="font-size:13px;color:var(--color-on-surface-variant);line-height:1.5;margin:0 0 18px;flex:1;">
+                            {{ Str::limit($diet->description ?? 'Targeted high-compliance daily meal blueprint curated by athletic trainers.', 110) }}
+                        </p>
+
+                        {{-- Card Footer --}}
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--color-surface-highest);">
+                            <span style="font-size:11px;color:var(--color-outline);text-transform:uppercase;letter-spacing:.06em;">Verified Plan</span>
+                            <a href="{{ route('diet-plans.show', $diet) }}" class="btn-primary" style="padding:8px 16px;font-size:11px;">
+                                View Plan <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
             @empty
-                <div style="grid-column:1/-1;text-align:center;color:var(--color-outline);">No diet plans available.</div>
+                <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--color-outline);background:var(--color-surface-low);border-radius:12px;border:1px dashed var(--color-surface-highest);">
+                    No diet plans uploaded yet.
+                </div>
             @endforelse
         </div>
     </div>

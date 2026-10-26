@@ -12,6 +12,16 @@ class DietPlan extends Model
     ];
     protected $casts = ['is_public' => 'boolean'];
 
+    public function getNameAttribute(): ?string
+    {
+        return $this->attributes['title'] ?? null;
+    }
+
+    public function setNameAttribute($value): void
+    {
+        $this->attributes['title'] = $value;
+    }
+
     public function getCoverImageUrlAttribute(): ?string
     {
         if (!$this->cover_image) return null;

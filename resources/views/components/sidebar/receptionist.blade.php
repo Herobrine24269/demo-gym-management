@@ -25,6 +25,19 @@
         <span>Payments</span>
     </a>
 
+    @if((string) \App\Models\GymSetting::get('receptionist_can_view_payment_requests', '0') === '1')
+        <a href="{{ route('admin.payment-requests.index') }}" class="nav-link-dark {{ request()->routeIs('admin.payment-requests.*') ? 'active' : '' }}">
+            <span class="material-symbols-outlined">pending_actions</span>
+            <span>Payment Requests</span>
+            @php $recPending = \App\Models\PaymentSubmission::pending()->count(); @endphp
+            @if($recPending > 0)
+                <span class="badge-accent" style="margin-left:auto;background:var(--color-primary);color:#000;font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px;">
+                    {{ $recPending }}
+                </span>
+            @endif
+        </a>
+    @endif
+
     <a href="{{ route('admin.renewals.index') }}" class="nav-link-dark {{ request()->routeIs('admin.renewals.*') ? 'active' : '' }}">
         <span class="material-symbols-outlined">autorenew</span>
         <span>Renewals</span>

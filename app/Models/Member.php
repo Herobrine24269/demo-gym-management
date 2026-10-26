@@ -41,6 +41,7 @@ class Member extends Model
     }
     public function ptSessions()     { return $this->hasMany(PersonalTrainingSession::class); }
     public function addonOrders()    { return $this->hasMany(AddonOrder::class); }
+    public function paymentSubmissions() { return $this->hasMany(PaymentSubmission::class); }
 
     /* ── Accessors ────────────────────────────── */
     public function getNameAttribute()  { return $this->user->name ?? ''; }

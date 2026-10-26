@@ -39,14 +39,14 @@ class DietPlanController extends Controller
         }
 
         DietPlan::create([
-            'name'           => $data['name'],
+            'title'          => $data['name'],
             'goal'           => $data['goal'] ?? null,
             'total_calories' => $data['total_calories'] ?? null,
             'total_protein_g'=> $data['protein_g'] ?? null,
             'total_carbs_g'  => $data['carbs_g'] ?? null,
             'total_fat_g'    => $data['fat_g'] ?? null,
-            'description'    => $data['description'] ?? null,
             'cover_image'    => $imagePath,
+            'is_public'       => true,
             'created_by'     => auth()->id(),
         ]);
 
@@ -98,14 +98,14 @@ class DietPlanController extends Controller
         }
 
         $dietPlan->update([
-            'name'           => $data['name'],
+            'title'          => $data['name'],
             'goal'           => $data['goal'] ?? null,
             'total_calories' => $data['total_calories'] ?? null,
             'total_protein_g'=> $data['protein_g'] ?? null,
             'total_carbs_g'  => $data['carbs_g'] ?? null,
             'total_fat_g'    => $data['fat_g'] ?? null,
-            'description'    => $data['description'] ?? null,
             'cover_image'    => $imagePath,
+            'is_public'       => true,
         ]);
 
         return redirect()->route('admin.diet-plans.index')->with('success', 'Diet plan updated.');
